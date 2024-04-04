@@ -17,3 +17,17 @@ export const blogPostSchema = z.object({
 });
 
 export type BlogPostFormData = z.infer<typeof blogPostSchema>;
+
+
+
+// Auth Schemas
+// LoginFormSchema
+const loginEmailValidation = z.string().email();
+const loginPasswordValidation = z.string();
+
+export const loginFormSchema = z.object({
+  email: loginEmailValidation,
+  password: loginPasswordValidation,
+});
+
+// SignupFormSchema

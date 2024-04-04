@@ -3,6 +3,8 @@
 import Link from "next/link";
 import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
+import { Button } from "../ui/button";
+import LoginButton from "../auth/LoginButton";
 
 const Header = () => {
   return (
@@ -24,7 +26,11 @@ const Header = () => {
           </div>
 
           <div>
-            <Link href='/signin'>Sign in</Link>
+            <LoginButton>
+              <Button variant='secondary' size='lg'>
+                Sign in
+              </Button>
+            </LoginButton>
           </div>
         </div>
       </header>

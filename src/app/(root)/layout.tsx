@@ -1,11 +1,7 @@
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
-      <div className='max-w-[1400px] mx-auto mt-5 mb-5'> {children}</div>
-    </>
+    <div className='h-full flex items-center justify-center'>{children}</div>
   );
-}
+};
+
+export default AuthLayout;

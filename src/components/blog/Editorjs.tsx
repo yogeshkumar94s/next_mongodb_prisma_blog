@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+
+// import { addBlogPost } from "@/actions";
+import { FormEvent } from "react";
 
 interface BlogPostFormData {
   title: string;
@@ -9,33 +11,25 @@ interface BlogPostFormData {
   tags: string;
 }
 
-const AddBlogPost: React.FC = () => {
-  const [formData, setFormData] = useState<BlogPostFormData>({
-    title: "",
-    imageUrl: "",
-    content: "",
-    category: "",
-    tags: "",
-  });
+const AddBlogPostForm: React.FC = () => {
+  // const addBlogPostHandler = async (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const form = event.currentTarget;
+  //   const formData = new FormData(form);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  //   const typedFormData: BlogPostFormData = {
+  //     title: formData.get("title") as string,
+  //     imageUrl: formData.get("imageUrl") as string,
+  //     content: formData.get("content") as string,
+  //     category: formData.get("category") as string,
+  //     tags: formData.get("tags") as string,
+  //   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-    // Here you would typically send the formData to your backend/server
-  };
+  //   await addBlogPost(typedFormData);
+  // };
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-10 max-w-xl mx-auto'>
+    <form className='space-y-10 max-w-xl mx-auto'>
       <div>
         <label
           htmlFor='title'
@@ -50,8 +44,6 @@ const AddBlogPost: React.FC = () => {
           id='title'
           required
           className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-          value={formData.title}
-          onChange={handleChange}
         />
       </div>
       <div>
@@ -67,8 +59,6 @@ const AddBlogPost: React.FC = () => {
           placeholder='imageUrl'
           id='imageUrl'
           className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-          value={formData.imageUrl}
-          onChange={handleChange}
         />
       </div>
       <div>
@@ -84,8 +74,6 @@ const AddBlogPost: React.FC = () => {
           required
           rows={10}
           className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-          value={formData.content}
-          onChange={handleChange}
         />
       </div>
       <div>
@@ -101,8 +89,6 @@ const AddBlogPost: React.FC = () => {
           placeholder='category'
           id='category'
           className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-          value={formData.category}
-          onChange={handleChange}
         />
       </div>
       <div>
@@ -118,8 +104,6 @@ const AddBlogPost: React.FC = () => {
           id='tags'
           placeholder='Separate tags with commas'
           className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-          value={formData.tags}
-          onChange={handleChange}
         />
       </div>
       <div className='flex justify-end'>
@@ -134,4 +118,4 @@ const AddBlogPost: React.FC = () => {
   );
 };
 
-export default AddBlogPost;
+export default AddBlogPostForm;
