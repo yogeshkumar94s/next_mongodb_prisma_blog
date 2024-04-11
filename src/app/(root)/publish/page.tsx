@@ -1,9 +1,9 @@
-import Editorjs from "@/components/blog/Editorjs";
+import CreatePost from "@/components/blog/CreatePost";
 
 const articlePublish = () => {
   return (
     <div>
-      <Editorjs />
+      <CreatePost />
     </div>
   );
 };

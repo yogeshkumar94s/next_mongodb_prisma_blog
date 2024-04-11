@@ -1,121 +1,75 @@
 "use client";
 
-// import { addBlogPost } from "@/actions";
-import { FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import EditorJS from "@editorjs/editorjs";
+import { Button } from "../ui/button";
 
-interface BlogPostFormData {
-  title: string;
-  imageUrl: string;
-  content: string;
-  category: string;
-  tags: string;
-}
+export default function Editor() {
+  const [isMounted, setIsMounted] = useState(false);
+  const ref = useRef<EditorJS>();
 
-const AddBlogPostForm: React.FC = () => {
-  // const addBlogPostHandler = async (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const form = event.currentTarget;
-  //   const formData = new FormData(form);
+  const initializeEditor = async () => {
+    const EditorJS = (await import("@editorjs/editorjs")).default;
+    const Header = (await import("@editorjs/header")).default;
+    const Table = (await import("@editorjs/table")).default;
+    const List = (await import("@editorjs/list")).default;
 
-  //   const typedFormData: BlogPostFormData = {
-  //     title: formData.get("title") as string,
-  //     imageUrl: formData.get("imageUrl") as string,
-  //     content: formData.get("content") as string,
-  //     category: formData.get("category") as string,
-  //     tags: formData.get("tags") as string,
-  //   };
+    if (!ref.current) {
+      const editor = new EditorJS({
+        holder: "editorjs",
+        tools: {
+          header: Header,
+          table: Table,
+          list: List,
+        },
+      });
+      ref.current = editor;
+    }
+  };
 
-  //   await addBlogPost(typedFormData);
-  // };
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsMounted(true);
+    }
+  }, []);
+  useEffect(() => {
+    const init = async () => {
+      await initializeEditor();
+    };
+    if (isMounted) {
+      init();
+
+      return () => {
+        if (ref.current) {
+          ref.current.destroy();
+        }
+      };
+    }
+  }, [isMounted]);
+
+  const save = () => {
+    if (ref.current) {
+      ref.current.save().then((outputData) => {
+        console.log("Article data: ", outputData);
+        alert(JSON.stringify(outputData));
+      });
+    }
+  };
 
   return (
-    <form className='space-y-10 max-w-xl mx-auto'>
+    <>
+      <div id='editorjs'></div>
       <div>
-        <label
-          htmlFor='title'
-          className='block border-b-2 text-md font-medium text-gray-700'
+        <Button
+          variant='secondary'
+          size='lg'
+          onClick={() => {
+            save();
+          }}
         >
-          Title
-        </label>
-        <input
-          type='text'
-          placeholder='Title'
-          name='title'
-          id='title'
-          required
-          className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-        />
+          Save
+        </Button>
       </div>
-      <div>
-        <label
-          htmlFor='imageUrl'
-          className='block border-b-2 text-sm font-medium text-gray-700'
-        >
-          Image URL
-        </label>
-        <input
-          type='text'
-          name='imageUrl'
-          placeholder='imageUrl'
-          id='imageUrl'
-          className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-        />
-      </div>
-      <div>
-        <label
-          htmlFor='content'
-          className='block border-b-2 text-sm font-medium text-gray-700'
-        >
-          Content
-        </label>
-        <textarea
-          name='content'
-          id='content'
-          required
-          rows={10}
-          className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-        />
-      </div>
-      <div>
-        <label
-          htmlFor='category'
-          className='block border-b-2 text-sm font-medium text-gray-700'
-        >
-          Category
-        </label>
-        <input
-          type='text'
-          name='category'
-          placeholder='category'
-          id='category'
-          className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-        />
-      </div>
-      <div>
-        <label
-          htmlFor='tags'
-          className='block border-b-2 text-sm font-medium text-gray-700'
-        >
-          Tags
-        </label>
-        <input
-          type='text'
-          name='tags'
-          id='tags'
-          placeholder='Separate tags with commas'
-          className='mt-5 p-3 block w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-100 focus:ring-indigo-100 sm:text-sm'
-        />
-      </div>
-      <div className='flex justify-end'>
-        <button
-          type='submit'
-          className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-        >
-          Submit
-        </button>
-      </div>
-    </form>
+    </>
   );
-};
-
-export default AddBlogPostForm;
+}

@@ -1,29 +1,26 @@
 import * as z from 'zod';
 
-// Adjusted validation rules
-const titleValidation = z.string().min(5, { message: "Title should be at least 5 characters." });
-const contentValidation = z.string().min(500, { message: "At least 500 words should be there in a blog post." });
-const categoryValidation = z.enum(["Technology", "Life", "Automobile"]);
-const imageUrlValidation = z.string().url({ message: "Image URL must be a valid URL." });
+
+const titleValidation = z.string().min(1, {message: "Title is required"});
+const contentValidation = z.string().min(1, {message: "Content is required"});
+const categoryValidation = z.string().min(1, {message: "Select category"});
 const tagsValidation = z.string().min(1, { message: "Tags field cannot be empty." }).transform((tags) => tags.split(',').map(tag => tag.trim()));
 
-// Complete blog post schema with all fields
-export const blogPostSchema = z.object({
+
+export const createPostSchema = z.object({
   title: titleValidation,
   content: contentValidation,
   category: categoryValidation,
-  imageUrl: imageUrlValidation,
   tags: tagsValidation,
 });
 
-export type BlogPostFormData = z.infer<typeof blogPostSchema>;
-
-
+//--------------------------------------------------------------------------------------------------------
 
 // Auth Schemas
+
 // LoginFormSchema
 const loginEmailValidation = z.string().email();
-const loginPasswordValidation = z.string();
+const loginPasswordValidation = z.string().min(1, {message: "Password is required"});
 
 export const loginFormSchema = z.object({
   email: loginEmailValidation,
@@ -31,3 +28,14 @@ export const loginFormSchema = z.object({
 });
 
 // SignupFormSchema
+const signUpEmailValidation = z.string().email();
+const signUpPasswordValidation = z.string().min(6, {message: "Password must be 6 characters"});
+const signUpNameValidation = z.string().min(1, {message: "Username is required!"})
+
+export const signUpFormSchema = z.object({
+  email: signUpEmailValidation,
+  name: signUpNameValidation,
+  password: signUpPasswordValidation,
+});
+
+
